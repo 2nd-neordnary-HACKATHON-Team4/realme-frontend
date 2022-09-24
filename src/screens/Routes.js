@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import HomeScreen from './HomeScreen';
+import HomeScreen from './Feed/HomeScreen';
 import onBoardingScreen from './onBoarding/OnBoardingScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyPageScreen from './MyPageScreen';

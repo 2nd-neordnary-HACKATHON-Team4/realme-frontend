@@ -5,6 +5,8 @@ import onBoardingScreen from './onBoarding/OnBoardingScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyPageScreen from './MyPageScreen';
 import CalendarScreen from './CalendarScreen';
+import LoginScreen from './LogInScreen';
+import SignUpScreen from './SignUpScreen';
 import {Image} from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -79,4 +81,27 @@ const OnBoardingRoutes = () => {
   );
 };
 
-export {RootRoutes, OnBoardingRoutes};
+const LogInStack = createNativeStackNavigator();
+
+const LoginRoutes = () => {
+  return (
+    <LogInStack.Navigator>
+      <LogInStack.Screen
+        name="LogIn"
+        component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <LogInStack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          title: '회원가입(1/2)',
+          headerTitleStyle: {color: 'black', fontWeight: 'bold'},
+          headerTintColor: '#62F6EE',
+        }}
+      />
+    </LogInStack.Navigator>
+  );
+};
+
+export {RootRoutes, OnBoardingRoutes, LoginRoutes};

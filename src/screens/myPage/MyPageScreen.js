@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 import colors from '../../constants/color';
 import HeartIcon from '../../assets/calendar/heart.png';
-import colors from '../../constants/color';
-
 
 const MyPageScreen = () => {
   return (
@@ -38,7 +36,6 @@ const MyPageScreen = () => {
 };
 
 const styles = StyleSheet.create({
-
   boldText: {fontWeight: 'bold', fontSize: 26},
   center: {alignItems: 'center'},
   container: {

@@ -14,15 +14,12 @@ import {
 } from 'react-native';
 import LoginButton from '../components/LoginButton';
 
-function SignUpScreen({navigation, route}) {
+function SignUpNextScreen({navigation, route}) {
   const [send, isSend] = useState(false);
+  console.log(send);
 
   const onPressSend = () => {
     isSend(true);
-  };
-
-  const onPressNextButton = () => {
-    navigation.push('SignUpNext');
   };
 
   return (
@@ -30,10 +27,18 @@ function SignUpScreen({navigation, route}) {
       <View style={styles.top}>
         {/* input component */}
         <View style={styles.box}>
-          <Text style={styles.text}>이메일</Text>
+          <Text style={styles.text}>비밀번호</Text>
           <TextInput
             style={styles.input}
-            placeholder="ex) aaa@naver.com"
+            placeholder="특수기호 포함 8자리 이상"
+            placeholderTextColor={'#C5CCD4'}
+          />
+        </View>
+        <View style={styles.box}>
+          <Text style={styles.text}>비밀번호 확인</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="비밀번호를 한 번 더 입력해주세요"
             placeholderTextColor={'#C5CCD4'}
           />
         </View>
@@ -52,11 +57,7 @@ function SignUpScreen({navigation, route}) {
         {send ? (
           <View style={styles.validationBox}>
             <Text style={styles.validationText}>인증번호 ?자리</Text>
-            <View style={styles.validationContainer}>
-              <TextInput style={styles.validationInput} />
-              <Text style={styles.timer}>??분 ??초</Text>
-            </View>
-
+            <TextInput style={styles.validationInput} />
             <View style={styles.bar}></View>
             <Text style={styles.validationWarning}>
               인증번호는 입력한 이메일 주소로 발송됩니다.
@@ -75,7 +76,7 @@ function SignUpScreen({navigation, route}) {
       </View>
       {send ? (
         <View style={styles.bottom}>
-          <LoginButton name="다음" send={send} onPress={onPressNextButton} />
+          <LoginButton name="다음" send={send} />
         </View>
       ) : (
         <View style={styles.bottom}>
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#32E7DC',
     width: 315,
     height: 39,
-    marginTop: 13.5,
+    marginTop: 10,
   },
   sendBtnText: {
     color: 'white',
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 315,
     height: 39,
-    marginTop: 13.5,
+    marginTop: 10,
   },
   sendedBtnText: {
     color: '#32E7DC',
@@ -170,16 +171,6 @@ const styles = StyleSheet.create({
   validationBox: {
     marginTop: 30,
   },
-  validationContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  timer: {
-    fontSize: 15,
-    fontWeight: '700',
-  },
   validationText: {
     fontSize: 15,
     fontWeight: '700',
@@ -198,4 +189,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default SignUpNextScreen;

@@ -3,7 +3,7 @@ import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import FeedListViewScreen from './FeedListViewScreen';
 import FeedTagChooseScreen from './FeedTagChooseScreen';
-import {Text, TouchableOpacity} from 'react-native';
+import FeedWriteViewScreen from './FeedWriteViewScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +21,14 @@ const HomeScreen = () => {
           component={FeedTagChooseScreen}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FeedWriteView"
+          component={FeedWriteViewScreen}
+          options={{
+            headerTitle: '작성하기',
+            headerBackTitle: '',
           }}
         />
       </Stack.Navigator>

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   Text,
@@ -14,14 +15,46 @@ import {
 } from 'react-native';
 import LoginButton from '../components/LoginButton';
 
-function SignUpNextScreen({navigation, route}) {
+function SignUpNextScreen({navigation, route, email, setEmail}) {
   const [send, isSend] = useState(false);
-  console.log(send);
+  const [password, setPassword] = useState('');
+  const [comfirmPassword, setConfirmPassword] = useState('');
+  const [nickname, setNickname] = useState('');
 
-  const onPressSend = () => {
-    isSend(true);
+  const fetchDuplication = async () => {
+    axios
+      .get('http://prod.sogogi.shop:9000/users/nickname/aa/duplication')
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
+  const fetchSignUp = async () => {
+    axios
+      .post('http://prod.sogogi.shop:9000/users/signup', {
+        email: email,
+        nickname: nickname,
+        password: password,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const onPressDuplication = () => {
+    fetchDuplication;
+  };
+
+  const onPressSignUp = () => {
+    fetchSignUp;
+  };
+  console.log(route.params.email);
   return (
     <SafeAreaView style={styles.fullscreen}>
       <View style={styles.top}>
@@ -32,6 +65,9 @@ function SignUpNextScreen({navigation, route}) {
             style={styles.input}
             placeholder="특수기호 포함 8자리 이상"
             placeholderTextColor={'#C5CCD4'}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
           />
         </View>
         <View style={styles.box}>
@@ -40,49 +76,32 @@ function SignUpNextScreen({navigation, route}) {
             style={styles.input}
             placeholder="비밀번호를 한 번 더 입력해주세요"
             placeholderTextColor={'#C5CCD4'}
+            value={comfirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
           />
         </View>
-        {send ? (
-          <Pressable onPress={onPressSend} style={styles.sendedBtn}>
-            <Text style={styles.sendedBtnText}>
-              인증번호 전송(남은 횟수 x회)
-            </Text>
-          </Pressable>
-        ) : (
-          <Pressable onPress={onPressSend} style={styles.sendBtn}>
-            <Text style={styles.sendBtnText}>인증번호 전송</Text>
-          </Pressable>
-        )}
-
-        {send ? (
-          <View style={styles.validationBox}>
-            <Text style={styles.validationText}>인증번호 ?자리</Text>
-            <TextInput style={styles.validationInput} />
-            <View style={styles.bar}></View>
-            <Text style={styles.validationWarning}>
-              인증번호는 입력한 이메일 주소로 발송됩니다.
-            </Text>
-            <Text style={styles.validationWarning}>
-              수신하지 못했다면 스팸함 또는 해당 이메일 서비스의 설정을
-              확인해주세요.
-            </Text>
+        <View style={styles.box}>
+          <Text style={styles.text}>닉네임</Text>
+          <View style={styles.duplicationBox}>
+            <TextInput
+              style={styles.nicknameInput}
+              placeholder="최대 8자를 입력해주세요"
+              placeholderTextColor={'#C5CCD4'}
+              value={nickname}
+              onChangeText={setNickname}
+            />
+            <Pressable
+              style={styles.duplicationBtn}
+              onPress={onPressDuplication}>
+              <Text style={styles.sendBtnText}>중복확인</Text>
+            </Pressable>
           </View>
-        ) : (
-          <Text style={styles.warning}>
-            회원 가입시 ID는 반드시 본인 소유의 연락 가능한 이메일 주소를
-            사용하여야 합니다.
-          </Text>
-        )}
+        </View>
       </View>
-      {send ? (
-        <View style={styles.bottom}>
-          <LoginButton name="다음" send={send} />
-        </View>
-      ) : (
-        <View style={styles.bottom}>
-          <LoginButton name="다음" send={send} />
-        </View>
-      )}
+      <View style={styles.bottom}>
+        <LoginButton name="다음" send={true} onPress={onPressSignUp} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -104,6 +123,12 @@ const styles = StyleSheet.create({
   box: {
     width: '100%',
     height: 71,
+    marginBottom: 22.5,
+  },
+  duplicationBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   text: {
     fontSize: 15,
@@ -121,6 +146,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
   },
+  nicknameInput: {
+    borderColor: '#C5CCD4',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingLeft: 10,
+    fontSize: 15,
+    fontWeight: '700',
+    width: 229,
+  },
   sendBtn: {
     borderRadius: 10,
     alignItems: 'center',
@@ -132,60 +167,32 @@ const styles = StyleSheet.create({
     height: 39,
     marginTop: 10,
   },
-  sendBtnText: {
-    color: 'white',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  sendedBtn: {
+  duplicationBtn: {
+    backgroundColor: '#32E7DC',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 10,
     paddingVertical: 8,
-    backgroundColor: 'white',
-    borderColor: '#32E7DC',
-    borderWidth: 1,
-    width: 315,
-    height: 39,
-    marginTop: 10,
   },
+  sendBtnText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+
   sendedBtnText: {
     color: '#32E7DC',
     fontSize: 15,
     fontWeight: '700',
   },
-  warning: {
-    fontSize: 8,
-    color: '#8B95A1',
-    fontWeight: '700',
-    marginTop: 10,
-  },
+
   bottom: {
     position: 'absolute',
     width: 375,
     height: 120,
     bottom: 0,
     paddingHorizontal: 30,
-  },
-  validationBox: {
-    marginTop: 30,
-  },
-  validationText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#A8A8A8',
-  },
-  validationWarning: {
-    fontSize: 8,
-    color: '#8B95A1',
-    fontWeight: '700',
-  },
-  bar: {
-    width: 315,
-    height: 1,
-    backgroundColor: '#000000',
-    marginBottom: 10,
   },
 });
 

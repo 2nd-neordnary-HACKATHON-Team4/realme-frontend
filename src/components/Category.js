@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import colors from '../constants/color';
+import ShadowEffect from './ShadowEffect';
 
 const Category = ({
   children,
@@ -13,42 +14,52 @@ const Category = ({
 }) => {
   if (isActive) {
     return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={[
-          styles({width, height}).block,
-          styles({width, height}).backgroundActive,
-        ]}>
-        <Text
+      <ShadowEffect
+        shadowColor={colors.blue_dark}
+        offset={{width: 0, height: 4}}
+        style={styles({width, height}).block}>
+        <TouchableOpacity
+          onPress={onPress}
           style={[
-            styles({width, height, fontSize}).text,
-            styles({width, height}).textActive,
+            styles({width, height}).block,
+            styles({width, height}).backgroundActive,
           ]}>
-          {children}
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={[
+              styles({width, height, fontSize}).text,
+              styles({width, height}).textActive,
+            ]}>
+            {children}
+          </Text>
+        </TouchableOpacity>
+      </ShadowEffect>
     );
   } else {
     return (
-      <TouchableOpacity
-        onPress={handleIsActive}
-        style={[
-          styles({width, height}).block,
-          styles({width, height}).backgroundInActive,
-        ]}>
-        <Text
+      <ShadowEffect
+        shadowColor={colors.blue_dark}
+        offset={{width: 0, height: 4}}
+        style={styles({width, height}).block}>
+        <TouchableOpacity
+          onPress={handleIsActive}
           style={[
-            styles({width, height, fontSize}).text,
-            styles({width, height}).textInActive,
+            styles({width, height}).block,
+            styles({width, height}).backgroundInActive,
           ]}>
-          {children}
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={[
+              styles({width, height, fontSize}).text,
+              styles({width, height}).textInActive,
+            ]}>
+            {children}
+          </Text>
+        </TouchableOpacity>
+      </ShadowEffect>
     );
   }
 };
 
-const styles = ({width, height, fontSize = 13}) =>
+const styles = ({width = 56, height = 26, fontSize = 13}) =>
   StyleSheet.create({
     block: {
       flex: 1,

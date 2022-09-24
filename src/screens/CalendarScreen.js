@@ -1,8 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {format} from 'date-fns';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+} from 'react-native';
 import colors from '../constants/color';
+import HeartIcon from '../assets/calendar/heart.png';
+import HeartFillIcon from '../assets/calendar/heart_fill.png';
+import CheckIcon from '../assets/calendar/check.png';
 
 LocaleConfig.defaultLocale = 'kr';
 
@@ -61,6 +71,14 @@ function CalendarScreen() {
               setSelectedDate(day.dateString);
             }}
           />
+          <View style={mainWrapstyles.checkWrap}>
+            <Text>
+              <Image style={mainWrapstyles.checkBox} source={CheckIcon} />
+              <View style={mainWrapstyles.checkNumber}>
+                <Text>&nbsp; 5</Text>
+              </View>
+            </Text>
+          </View>
           <View id="Content" style={mainWrapstyles.container}>
             <View style={mainWrapstyles.contentBox}>
               <Text style={mainWrapstyles.titleWrap}>
@@ -81,7 +99,13 @@ function CalendarScreen() {
                 </Text>
 
                 <View style={mainWrapstyles.heart}>
-                  <Text>💜</Text>
+                  <Text style={mainWrapstyles.heartText}>
+                    <Image
+                      style={mainWrapstyles.heartIcon}
+                      source={HeartIcon}
+                    />
+                    &nbsp; X개
+                  </Text>
                 </View>
               </View>
             </View>
@@ -92,6 +116,26 @@ function CalendarScreen() {
   );
 }
 const mainWrapstyles = StyleSheet.create({
+  heartText: {
+    fontSize: 13,
+  },
+  checkNumber: {
+    marginBottom: 1,
+  },
+  checkBox: {
+    width: 20,
+    height: 20,
+  },
+  checkWrap: {
+    marginLeft: 20,
+    marginTop: 5,
+    marginBottom: 20,
+    // height: 30,
+  },
+  heartIcon: {
+    width: 23,
+    height: 20,
+  },
   heart: {
     // paddingTop: 100,
     marginTop: 10,
@@ -144,7 +188,7 @@ const mainWrapstyles = StyleSheet.create({
       height: 2,
     },
     borderRadius: 10,
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
   },
@@ -158,7 +202,7 @@ const styles = StyleSheet.create({
   calendar: {
     borderBottomWidth: 1,
     paddingBottom: 10,
-    marginBottom: 30,
+    marginBottom: 10,
 
     borderBottomColor: colors.gray_light_gray,
     paddingLeft: 20,

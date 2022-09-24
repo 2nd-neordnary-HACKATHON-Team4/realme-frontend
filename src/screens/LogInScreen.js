@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   Text,
@@ -12,19 +13,59 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import BorderedInput from '../components/BorderedInput';
 import LoginButton from '../components/LoginButton';
 
 function LoginScreen({navigation}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [user, setUser] = useState('');
+
+  const fetchLogin = async () => {
+    axios
+      .post('http://prod.sogogi.shop:9000/users/login', {
+        email: email,
+        password: password,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setUser(response.data.result);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const onPressLogin = () => {
+    fetchLogin();
+  };
+
   return (
     <SafeAreaView style={styles.fullscreen}>
-      <View style={styles.image} />
+      <Image
+        style={styles.image}
+        source={require('../assets/socialIcons/logo.png')}
+      />
       <View style={styles.input}>
-        <BorderedInput hasMarginBottom placeholder="ID" />
-        <BorderedInput placeholder="Password" />
+        <TextInput
+          style={[styles.borderedInput, styles.margin]}
+          placeholder="ID"
+          placeholderTextColor={'#C8CBCF'}
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={styles.borderedInput}
+          placeholder="Password"
+          placeholderTextColor={'#C8CBCF'}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
         <View style={styles.button}>
           <Text style={styles.search}>아이디 찾기 / 비밀번호 찾기</Text>
-          <LoginButton name="로그인" send={true} />
+          <LoginButton name="로그인" send={true} onPress={onPressLogin} />
           <View style={styles.social}>
             <View style={styles.socialText}>
               <View style={styles.vector} />
@@ -71,11 +112,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#F2F1F6',
-    marginBottom: 60,
+    width: 191,
+    height: 43,
+    marginBottom: 91,
   },
   input: {
     width: 312,
@@ -143,6 +182,20 @@ const styles = StyleSheet.create({
     color: '#32E7DC',
     textDecorationLine: 'underline',
     fontWeight: 'bold',
+  },
+  borderedInput: {
+    borderColor: '#F2F1F6',
+    borderWidth: 1,
+    paddingHorizontal: 30,
+    paddingVertical: 14,
+    borderRadius: 10,
+    width: 312,
+    height: 51,
+    backgroundColor: '#F2F1F6',
+    fontSize: 15,
+  },
+  margin: {
+    marginBottom: 14,
   },
 });
 

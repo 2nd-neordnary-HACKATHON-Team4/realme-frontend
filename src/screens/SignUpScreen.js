@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,18 +11,21 @@ import {
   TextInput,
   Image,
   Pressable,
+  Animated,
+  useWindowDimensions,
 } from 'react-native';
 import LoginButton from '../components/LoginButton';
 
 function SignUpScreen({navigation, route}) {
   const [send, isSend] = useState(false);
+  const [email, setEmail] = useState('');
 
   const onPressSend = () => {
     isSend(true);
   };
 
   const onPressNextButton = () => {
-    navigation.push('SignUpNext');
+    navigation.push('SignUpNext', {email: email, setEmail: setEmail});
   };
 
   return (
@@ -35,6 +38,10 @@ function SignUpScreen({navigation, route}) {
             style={styles.input}
             placeholder="ex) aaa@naver.com"
             placeholderTextColor={'#C5CCD4'}
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
         {send ? (

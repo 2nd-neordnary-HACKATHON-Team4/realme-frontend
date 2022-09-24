@@ -1,12 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {OnBoardingRoutes, RootRoutes, LoginRoutes} from './src/screens/Routes';
 import {RecoilRoot} from 'recoil';
+import HomeScreen from './src/screens/Feed/HomeScreen';
+import MyPageScreen from './src/screens/MyPageScreen';
+import {OnBoardingRoutes, RootRoutes, LoginRoutes} from './src/screens/Routes';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  useEffect(() => {
+    try {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 2000); //스플래시 활성화 시간 2초
+    } catch (e) {
+      console.log(e.message);
+    }
+  });
   return (
     <RecoilRoot>
       <NavigationContainer>

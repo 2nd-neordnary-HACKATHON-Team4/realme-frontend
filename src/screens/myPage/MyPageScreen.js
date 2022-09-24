@@ -1,10 +1,18 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Switch,
+  TextInput,
+} from 'react-native';
+import colors from '../../constants/color';
 
 const MyPageScreen = () => {
   return (
     <SafeAreaView>
-      <Text>MyPage</Text>
+      <Text>설정 해더 추후 추가</Text>
     </SafeAreaView>
   );
 };
@@ -12,7 +20,7 @@ const MyPageScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.gray_gray,
   },
 });
 

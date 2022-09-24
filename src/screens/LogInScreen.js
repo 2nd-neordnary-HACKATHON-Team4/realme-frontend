@@ -24,7 +24,7 @@ function LoginScreen({navigation}) {
         <BorderedInput placeholder="Password" />
         <View style={styles.button}>
           <Text style={styles.search}>아이디 찾기 / 비밀번호 찾기</Text>
-          <LoginButton title="로그인" />
+          <LoginButton name="로그인" send={true} />
           <View style={styles.social}>
             <View style={styles.socialText}>
               <View style={styles.vector} />

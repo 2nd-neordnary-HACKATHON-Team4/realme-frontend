@@ -7,6 +7,7 @@ import MyPageScreen from './myPage/MyPageScreen';
 import CalendarScreen from './CalendarScreen';
 import LoginScreen from './LogInScreen';
 import SignUpScreen from './SignUpScreen';
+import SignUpNextScreen from './SignUpNextScreen';
 import {Image} from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -96,6 +97,15 @@ const LoginRoutes = () => {
         component={SignUpScreen}
         options={{
           title: '회원가입(1/2)',
+          headerTitleStyle: {color: 'black', fontWeight: 'bold'},
+          headerTintColor: '#62F6EE',
+        }}
+      />
+      <LogInStack.Screen
+        name="SignUpNext"
+        component={SignUpNextScreen}
+        options={{
+          title: '회원가입(2/2)',
           headerTitleStyle: {color: 'black', fontWeight: 'bold'},
           headerTintColor: '#62F6EE',
         }}

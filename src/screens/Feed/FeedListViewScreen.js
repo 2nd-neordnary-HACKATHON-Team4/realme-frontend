@@ -13,6 +13,7 @@ import {
 import Category from '../../components/Category';
 import colors from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
+import ShadowEffect from '../../components/ShadowEffect';
 
 const FeedListViewScreen = () => {
   const navigation = useNavigation();
@@ -185,13 +186,17 @@ const FeedListViewScreen = () => {
           </View>
         )}
       />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          navigation.navigate('FeedTagChoose');
-        }}>
-        <Text style={styles.addButtonText}>+</Text>
-      </TouchableOpacity>
+      <ShadowEffect
+        shadowColor={colors.blue_dark}
+        offset={{width: 4, height: 4}}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            navigation.navigate('FeedTagChoose');
+          }}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
+      </ShadowEffect>
     </SafeAreaView>
   );
 };

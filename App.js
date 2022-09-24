@@ -1,7 +1,9 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {OnBoardingRoutes, RootRoutes} from './src/screens/Routes';
+// import HomeScreen from './src/screens/Feed/HomeScreen';
+// import MyPageScreen from './src/screens/MyPageScreen';
+import {OnBoardingRoutes, RootRoutes, LoginRoutes} from './src/screens/Routes';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +15,7 @@ const App = () => {
           headerShown: false,
         }}
         initialRouteName="Root">
+        <Stack.Screen name="LogIn" component={LoginRoutes} />
         <Stack.Screen name="Root" component={RootRoutes} />
         <Stack.Screen name="OnBoarding" component={OnBoardingRoutes} />
       </Stack.Navigator>

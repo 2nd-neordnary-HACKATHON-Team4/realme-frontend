@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -13,13 +13,30 @@ import {
 import Category from '../../components/Category';
 import colors from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
+import ShadowEffect from '../../components/ShadowEffect';
+import {axiosInstance} from '../../queries';
 
 const FeedListViewScreen = () => {
   const navigation = useNavigation();
   const [isHeartPressed, setIsHeartPressed] = useState(false);
+  const postSignUp = () => {
+    axiosInstance
+      .post('/users/signup', {
+        email: 'abcd123@gmail.com',
+        nickName: '소고기',
+        password: 'abcd1234!',
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   const [categoryList, setCategoryList] = useState([
     {
-      name: '집순이',
+      name: '전체',
       isActive: true,
     },
     {
@@ -121,18 +138,24 @@ const FeedListViewScreen = () => {
   return (
     <SafeAreaView style={styles.block}>
       <StatusBar backgroundColor="white" />
-      <ScrollView horizontal={true} style={styles.categoryList}>
-        {categoryList.map((item, index) => {
-          return (
-            <View key={index} style={styles.category}>
-              <Category text={item.name} isActive={item.isActive} />
-            </View>
-          );
-        })}
-      </ScrollView>
+      <View style={styles.categoryContainer}>
+        <ScrollView horizontal={true} style={styles.categoryList}>
+          {categoryList.map((item, index) => {
+            return (
+              <View key={index} style={styles.category}>
+                <Category isActive={item.isActive} width={56} height={26}>
+                  {item.name}
+                </Category>
+              </View>
+            );
+          })}
+          <View style={styles.categoryFooter} />
+        </ScrollView>
+        <View style={styles.categoryFooter} />
+      </View>
       <FlatList
         style={styles.feedList}
-        // ListFooterComponent={<View style={styles.footer} />}
+        ListFooterComponent={<View style={styles.footer} />}
         data={feedList}
         renderItem={({item}) => (
           <View key={item.id} style={styles.feedItem}>
@@ -179,13 +202,18 @@ const FeedListViewScreen = () => {
           </View>
         )}
       />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          navigation.navigate('FeedTagChoose');
-        }}>
-        <Text style={styles.addButtonText}>+</Text>
-      </TouchableOpacity>
+      <ShadowEffect
+        shadowColor={colors.blue_dark}
+        offset={{width: 4, height: 4}}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            postSignUp();
+            // navigation.navigate('FeedTagChoose');
+          }}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
+      </ShadowEffect>
     </SafeAreaView>
   );
 };
@@ -193,6 +221,12 @@ const FeedListViewScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    backgroundColor: colors.gray_white,
+  },
+  categoryContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   categoryList: {
     height: 54,
@@ -203,8 +237,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   category: {
-    height: 28,
     marginRight: 14,
+  },
+  categoryFooter: {
+    width: 38,
+    height: 54,
+    backgroundColor: colors.gray_white,
+  },
+  feedList: {
+    backgroundColor: colors.gray_light_gray,
+    paddingVertical: 10,
   },
   feedItem: {
     backgroundColor: colors.gray_white,
@@ -277,12 +319,14 @@ const styles = StyleSheet.create({
     height: 65,
     borderRadius: 32.5,
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   addButtonText: {
     color: colors.gray_white,
-    fontSize: 50,
+    fontSize: 49,
+  },
+  footer: {
+    height: 80,
   },
 });
 

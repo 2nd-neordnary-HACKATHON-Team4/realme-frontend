@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,9 +16,32 @@ import DefaultCircle from '../../assets/defaultCircle.png';
 import SettingButton from '../../assets/setting.png';
 import Arrow from '../../assets/myPage/leftArrow.png';
 import {useNavigation} from '@react-navigation/native';
+import Axios from 'axios';
 
 const MyPageScreen = () => {
   const navigation = useNavigation();
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    try {
+      Axios.post('http://prod.sogogi.shop:9000/users', {
+        headers: {
+          'X-Access-Token':
+            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDU3NTUwLCJleHAiOjE2NjQwNjAxNDJ9.4jZzbwYlJE8FTKE7_fuyH8S37Z1mD846nELHhVuOf2s',
+        },
+      }).then(res => {
+        console.log(res.result);
+        console.log('asf');
+        setApiData(res);
+      });
+    } catch (e) {
+      console.log('error');
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(apiData);
+  }, [apiData]);
 
   return (
     <SafeAreaView>
@@ -37,7 +60,7 @@ const MyPageScreen = () => {
         <View style={styles.backGray}>
           <Image source={DefaultCircle} style={styles.img} />
           <View style={styles.center}>
-            <Text style={styles.boldText}>홍길동</Text>
+            <Text style={styles.boldText}>홍길동 {apiData.nickname}</Text>
             <Text>안녕하세요 홍길동입니다.</Text>
           </View>
           <Button

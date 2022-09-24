@@ -87,7 +87,7 @@ const FeedTagChooseScreen = () => {
     {
       id: 13,
       name: '집순이',
-      isActive: true,
+      isActive: false,
     },
     {
       id: 14,
@@ -126,6 +126,9 @@ const FeedTagChooseScreen = () => {
         </View>
         <View style={styles.contentContainer}>
           <View style={styles.titleContainer}>
+            <Image
+              source={require('../../assets/images/pincersIcon/pincers.png')}
+            />
             <Text style={styles.titleText}>
               기록 글의 카테고리를 선택해주세요.
             </Text>
@@ -150,6 +153,7 @@ const FeedTagChooseScreen = () => {
               </View>
             )}
             numColumns={3}
+            columnWrapperStyle={styles.row}
             keyExtractor={item => item.id}
           />
           <Button
@@ -193,23 +197,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray_white,
     borderRadius: 50,
     display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 41,
+    paddingBottom: 17,
   },
   titleText: {
     fontWeight: 'bold',
     fontSize: 15,
+    color: colors.gray_gray,
   },
   categoryContainer: {
-    marginHorizontal: 23,
     marginTop: 30,
   },
   categoryWrapper: {
     marginBottom: 11,
-    width: '33%',
+  },
+  row: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   writeButton: {
     marginTop: 47,

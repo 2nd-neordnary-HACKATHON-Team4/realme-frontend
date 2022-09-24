@@ -16,10 +16,31 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import colors from '../../constants/color';
 import Category from '../../components/Category';
 import Button from '../../components/Button';
+import {axiosInstance} from '../../queries';
 
 const FeedWriteViewScreen = ({route, navigation}) => {
   const {selectedCategory} = route.params;
   const [picture, setPicture] = useState({uri: ''});
+  const [newFeed, setNewFeed] = useState({
+    categoryIdx: 0,
+    contents: '',
+    imgUrl: 'ewfwe',
+    title: '',
+  });
+  const postFeed = () => {
+    axiosInstance
+      .post('/home/feeds', {
+        categoryIdx: 1,
+        contents: newFeed.contents,
+        imgUrl: newFeed.imgUrl,
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
   const onSelectImage = () => {
     launchImageLibrary(
       {
@@ -34,6 +55,10 @@ const FeedWriteViewScreen = ({route, navigation}) => {
         }
         if (res.assets) {
           setPicture({uri: res?.assets[0]?.uri});
+          setNewFeed({
+            ...newFeed,
+            imgUrl: res?.assets[0]?.uri,
+          });
           console.log(res?.assets[0]?.uri);
           const formData = new FormData();
           formData.append('file', {
@@ -76,6 +101,13 @@ const FeedWriteViewScreen = ({route, navigation}) => {
           <View style={styles.formItemContainer}>
             <Text style={styles.titleText}>제목</Text>
             <TextInput
+              value={newFeed.title}
+              onChange={e => {
+                setNewFeed({
+                  ...newFeed,
+                  title: e.nativeEvent.text,
+                });
+              }}
               style={[styles.titleInput, styles.input]}
               placeholder="제목을 입력하세요"
             />
@@ -85,7 +117,7 @@ const FeedWriteViewScreen = ({route, navigation}) => {
             <TouchableOpacity
               onPress={onSelectImage}
               style={[styles.pictureInput, styles.input]}>
-              {picture === '' ? (
+              {picture.uri === '' ? (
                 <Image
                   source={require('../../assets/images/cameraIcon/camera.png')}
                 />
@@ -101,11 +133,25 @@ const FeedWriteViewScreen = ({route, navigation}) => {
           <View style={styles.formItemContainer}>
             <Text style={styles.titleText}>내용</Text>
             <TextInput
+              value={newFeed.contents}
+              onChange={e => {
+                setNewFeed({
+                  ...newFeed,
+                  contents: e.nativeEvent.text,
+                });
+              }}
               style={[styles.contentInput, styles.input]}
               placeholder="내용을 입력하세요"
             />
+            <Text>{newFeed.contents}</Text>
           </View>
-          <Button style={styles.writeButton}>작성하기</Button>
+          <Button
+            onPress={() => {
+              postFeed();
+            }}
+            style={styles.writeButton}>
+            작성하기
+          </Button>
         </ScrollView>
       </View>
     </SafeAreaView>

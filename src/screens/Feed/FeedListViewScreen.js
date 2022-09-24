@@ -15,63 +15,45 @@ import colors from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import ShadowEffect from '../../components/ShadowEffect';
 import {axiosInstance} from '../../queries';
+import {useRecoilState} from 'recoil';
+import {categoryListState} from '../../atoms/category';
 
 const FeedListViewScreen = () => {
   const navigation = useNavigation();
   const [isHeartPressed, setIsHeartPressed] = useState(false);
+  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
   const postSignUp = () => {
     axiosInstance
-      .post('/users/signup', {
+      .post('/users/login', {
         email: 'abcd123@gmail.com',
-        nickName: '소고기',
         password: 'abcd1234!',
       })
       .then(response => {
         console.log(response.data);
+        console.log(response.data.result);
+        axiosInstance.defaults.headers[
+          'x-access-token'
+        ] = `${response.data.result}`;
       })
       .catch(e => {
         console.log(e);
       });
   };
 
-  const [categoryList, setCategoryList] = useState([
-    {
-      name: '전체',
-      isActive: true,
-    },
-    {
-      name: '요리사',
-      isActive: false,
-    },
-    {
-      name: '회사원',
-      isActive: false,
-    },
-    {
-      name: '대학생',
-      isActive: true,
-    },
-    {
-      name: '알바생',
-      isActive: true,
-    },
-    {
-      name: '집순이',
-      isActive: true,
-    },
-    {
-      name: '집순이',
-      isActive: true,
-    },
-    {
-      name: '집순이',
-      isActive: true,
-    },
-    {
-      name: '집순이',
-      isActive: true,
-    },
-  ]);
+  useEffect(() => {
+    const getCategoryList = () => {
+      axiosInstance
+        .get('/categories/list')
+        .then(response => {
+          console.log(response.data.result);
+          setCategoryList(response.data.result);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getCategoryList();
+  }, []);
 
   const [feedList, setFeedList] = useState([
     {
@@ -143,8 +125,8 @@ const FeedListViewScreen = () => {
           {categoryList.map((item, index) => {
             return (
               <View key={index} style={styles.category}>
-                <Category isActive={item.isActive} width={56} height={26}>
-                  {item.name}
+                <Category isActive={true} width={56} height={26}>
+                  {item.categoryName}
                 </Category>
               </View>
             );
@@ -206,10 +188,22 @@ const FeedListViewScreen = () => {
         shadowColor={colors.blue_dark}
         offset={{width: 4, height: 4}}>
         <TouchableOpacity
-          style={styles.addButton}
+          // style={styles.addButton}
+          style={{backgroundColor: colors.gray_black, width: 40}}
           onPress={() => {
             postSignUp();
             // navigation.navigate('FeedTagChoose');
+          }}>
+          <Text style={{color: 'white'}}>login</Text>
+        </TouchableOpacity>
+      </ShadowEffect>
+      <ShadowEffect
+        shadowColor={colors.blue_dark}
+        offset={{width: 4, height: 4}}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            navigation.navigate('FeedTagChoose');
           }}>
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>

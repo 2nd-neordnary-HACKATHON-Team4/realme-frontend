@@ -3,7 +3,7 @@ import React from 'react';
 import HomeScreen from './Feed/HomeScreen';
 import onBoardingScreen from './onBoarding/OnBoardingScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MyPageScreen from './MyPageScreen';
+import MyPageScreen from './myPage/MyPageScreen';
 import CalendarScreen from './CalendarScreen';
 import LoginScreen from './LogInScreen';
 import SignUpScreen from './SignUpScreen';

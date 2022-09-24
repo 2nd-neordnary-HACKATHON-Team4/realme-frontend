@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {
   StyleSheet,
@@ -18,8 +18,10 @@ import LoginButton from '../components/LoginButton';
 function SignUpNextScreen({navigation, route, email, setEmail}) {
   const [send, isSend] = useState(false);
   const [password, setPassword] = useState('');
-  const [comfirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [valid, setValid] = useState(false);
+  const [duplicate, setDuplicate] = useState(false);
 
   const fetchDuplication = async () => {
     axios
@@ -52,8 +54,26 @@ function SignUpNextScreen({navigation, route, email, setEmail}) {
   };
 
   const onPressSignUp = () => {
+    if (password.length < 8) {
+      setValid(true);
+    }
+    if (password !== confirmPassword) {
+      setDuplicate(true);
+    }
     fetchSignUp;
   };
+
+  useEffect(() => {
+    if (valid && password.length >= 8) {
+      setValid(false);
+    }
+  }, [password]);
+  useEffect(() => {
+    if (duplicate && password === confirmPassword) {
+      setDuplicate(false);
+    }
+  }, [confirmPassword]);
+
   console.log(route.params.email);
   return (
     <SafeAreaView style={styles.fullscreen}>
@@ -70,17 +90,29 @@ function SignUpNextScreen({navigation, route, email, setEmail}) {
             secureTextEntry
           />
         </View>
+        {valid ? (
+          <Text style={styles.valid}>
+            특수기호 포함 8자리 이상을 입력해주세요
+          </Text>
+        ) : (
+          <></>
+        )}
         <View style={styles.box}>
           <Text style={styles.text}>비밀번호 확인</Text>
           <TextInput
             style={styles.input}
             placeholder="비밀번호를 한 번 더 입력해주세요"
             placeholderTextColor={'#C5CCD4'}
-            value={comfirmPassword}
+            value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
           />
         </View>
+        {duplicate ? (
+          <Text style={styles.valid}>비밀번호가 일치하지 않습니다.</Text>
+        ) : (
+          <></>
+        )}
         <View style={styles.box}>
           <Text style={styles.text}>닉네임</Text>
           <View style={styles.duplicationBox}>
@@ -193,6 +225,13 @@ const styles = StyleSheet.create({
     height: 120,
     bottom: 0,
     paddingHorizontal: 30,
+  },
+  valid: {
+    color: '#CA2323',
+    fontSize: 10,
+    fontWeight: '400',
+    marginTop: -20,
+    marginBottom: 20,
   },
 });
 

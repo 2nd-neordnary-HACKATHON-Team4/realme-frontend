@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -14,13 +14,29 @@ import Category from '../../components/Category';
 import colors from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import ShadowEffect from '../../components/ShadowEffect';
+import {axiosInstance} from '../../queries';
 
 const FeedListViewScreen = () => {
   const navigation = useNavigation();
   const [isHeartPressed, setIsHeartPressed] = useState(false);
+  const postSignUp = () => {
+    axiosInstance
+      .post('/users/signup', {
+        email: 'abcd123@gmail.com',
+        nickName: '소고기',
+        password: 'abcd1234!',
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   const [categoryList, setCategoryList] = useState([
     {
-      name: '집순이',
+      name: '전체',
       isActive: true,
     },
     {
@@ -192,7 +208,8 @@ const FeedListViewScreen = () => {
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => {
-            navigation.navigate('FeedTagChoose');
+            postSignUp();
+            // navigation.navigate('FeedTagChoose');
           }}>
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>

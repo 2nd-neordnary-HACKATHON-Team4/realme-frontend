@@ -121,18 +121,24 @@ const FeedListViewScreen = () => {
   return (
     <SafeAreaView style={styles.block}>
       <StatusBar backgroundColor="white" />
-      <ScrollView horizontal={true} style={styles.categoryList}>
-        {categoryList.map((item, index) => {
-          return (
-            <View key={index} style={styles.category}>
-              <Category text={item.name} isActive={item.isActive} />
-            </View>
-          );
-        })}
-      </ScrollView>
+      <View style={styles.categoryContainer}>
+        <ScrollView horizontal={true} style={styles.categoryList}>
+          {categoryList.map((item, index) => {
+            return (
+              <View key={index} style={styles.category}>
+                <Category isActive={item.isActive} width={56} height={26}>
+                  {item.name}
+                </Category>
+              </View>
+            );
+          })}
+          <View style={styles.categoryFooter} />
+        </ScrollView>
+        <View style={styles.categoryFooter} />
+      </View>
       <FlatList
         style={styles.feedList}
-        // ListFooterComponent={<View style={styles.footer} />}
+        ListFooterComponent={<View style={styles.footer} />}
         data={feedList}
         renderItem={({item}) => (
           <View key={item.id} style={styles.feedItem}>
@@ -193,6 +199,12 @@ const FeedListViewScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    backgroundColor: colors.gray_white,
+  },
+  categoryContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   categoryList: {
     height: 54,
@@ -203,8 +215,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   category: {
-    height: 28,
     marginRight: 14,
+  },
+  categoryFooter: {
+    width: 38,
+    height: 54,
+    backgroundColor: colors.gray_white,
+  },
+  feedList: {
+    backgroundColor: colors.gray_light_gray,
+    paddingVertical: 10,
   },
   feedItem: {
     backgroundColor: colors.gray_white,
@@ -277,12 +297,14 @@ const styles = StyleSheet.create({
     height: 65,
     borderRadius: 32.5,
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   addButtonText: {
     color: colors.gray_white,
-    fontSize: 50,
+    fontSize: 49,
+  },
+  footer: {
+    height: 80,
   },
 });
 

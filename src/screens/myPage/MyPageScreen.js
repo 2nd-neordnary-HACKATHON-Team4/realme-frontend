@@ -20,19 +20,18 @@ import Axios from 'axios';
 
 const MyPageScreen = () => {
   const navigation = useNavigation();
-  const [apiData, setApiData] = useState([]);
+  const [apiData, setApiData] = useState({});
 
   useEffect(() => {
     try {
-      Axios.post('http://prod.sogogi.shop:9000/users', {
+      Axios.get('http://prod.sogogi.shop:9000/users', {
         headers: {
-          'X-Access-Token':
-            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDU3NTUwLCJleHAiOjE2NjQwNjAxNDJ9.4jZzbwYlJE8FTKE7_fuyH8S37Z1mD846nELHhVuOf2s',
+          'X-ACCESS-TOKEN':
+            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDYwMzQ0LCJleHAiOjE2NjQwNjI5MzZ9.Ysfi70HECaQr4Ythtn3VMxM2SyXwaz6ZbpQmxVqn0vQ',
         },
       }).then(res => {
-        console.log(res.result);
-        console.log('asf');
-        setApiData(res);
+        console.log(res.data);
+        setApiData(res.data);
       });
     } catch (e) {
       console.log('error');
@@ -60,8 +59,16 @@ const MyPageScreen = () => {
         <View style={styles.backGray}>
           <Image source={DefaultCircle} style={styles.img} />
           <View style={styles.center}>
-            <Text style={styles.boldText}>홍길동 {apiData.nickname}</Text>
-            <Text>안녕하세요 홍길동입니다.</Text>
+            <Text style={styles.boldText}>
+              {apiData.result
+                ? apiData.result.nickname
+                : '불러오기를 실패했습니다.'}
+            </Text>
+            <Text>
+              {apiData.result
+                ? apiData.result.introduce
+                : '불러오기를 실패했습니다.'}
+            </Text>
           </View>
           <Button
             styles={styles.profileEditButton}
@@ -106,13 +113,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backGray: {
-    marginTop: 160,
+    marginTop: 120,
     borderRadius: 80,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
     width: 350,
-    height: 500,
+    height: 440,
   },
   profileEditButton: {
     width: 100,

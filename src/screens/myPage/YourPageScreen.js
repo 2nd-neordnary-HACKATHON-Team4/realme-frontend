@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,9 +16,18 @@ import DefaultCircle from '../../assets/defaultCircle.png';
 import SettingButton from '../../assets/setting.png';
 import Arrow from '../../assets/myPage/leftArrow.png';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
 
 const MyPageScreen = () => {
   const navigation = useNavigation();
+  const [apiData, setApiData] = useState({});
+
+  useEffect(() => {
+    axios.get(`http://prod.sogogi.shop:9000/users/14`).then(res => {
+      console.log(res.data);
+      setApiData(res.data);
+    });
+  }, []);
 
   return (
     <SafeAreaView>
@@ -37,8 +46,16 @@ const MyPageScreen = () => {
         <View style={styles.backGray}>
           <Image source={DefaultCircle} style={styles.img} />
           <View style={styles.center}>
-            <Text style={styles.boldText}>홍길동</Text>
-            <Text>안녕하세요 홍길동입니다.</Text>
+            <Text style={styles.boldText}>
+              {apiData.result
+                ? apiData.result.nickname
+                : '불러오기를 실패했습니다.'}
+            </Text>
+            <Text>
+              {apiData.result
+                ? apiData.result.introduce
+                : '불러오기를 실패했습니다.'}
+            </Text>
           </View>
         </View>
       </View>

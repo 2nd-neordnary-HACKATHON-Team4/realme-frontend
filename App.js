@@ -7,7 +7,6 @@ import {OnBoardingRoutes, RootRoutes, LoginRoutes} from './src/screens/Routes';
 import YourPageScreen from './src/screens/myPage/YourPageScreen';
 import SettingScreen from './src/screens/myPage/SettingScreen';
 import {RecoilRoot} from 'recoil';
-import HomeScreen from './src/screens/Feed/HomeScreen';
 import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();

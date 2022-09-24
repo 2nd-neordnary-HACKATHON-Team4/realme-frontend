@@ -5,6 +5,7 @@ import onBoardingScreen from './onBoarding/OnBoardingScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyPageScreen from './MyPageScreen';
 import CalendarScreen from './CalendarScreen';
+import {Image} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,9 +16,55 @@ const RootRoutes = () => {
         headerShown: false,
       }}
       initialRouteName="Home">
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Calendar" component={CalendarScreen} />
-      <Tab.Screen name="MyPage" component={MyPageScreen} />
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/calendarIcon/calendar_active.png')}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/calendarIcon/calendar.png')}
+              />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/homeIcon/home_active.png')}
+              />
+            ) : (
+              <Image source={require('../assets/images/homeIcon/home.png')} />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="MyPage"
+        component={MyPageScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/personIcon/person_active.png')}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/personIcon/person.png')}
+              />
+            ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

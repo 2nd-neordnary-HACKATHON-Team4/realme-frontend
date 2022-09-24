@@ -20,20 +20,32 @@ const RootRoutes = () => {
         name="Calendar"
         component={CalendarScreen}
         options={{
-          tabBarIcon: () => (
-            <Image
-              source={require('../assets/images/calendarIcon/calendar.png')}
-            />
-          ),
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/calendarIcon/calendar_active.png')}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/calendarIcon/calendar.png')}
+              />
+            ),
         }}
       />
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: () => (
-            <Image source={require('../assets/images/homeIcon/home.png')} />
-          ),
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/homeIcon/home_active.png')}
+              />
+            ) : (
+              <Image source={require('../assets/images/homeIcon/home.png')} />
+            ),
         }}
       />
       <Tab.Screen
@@ -41,9 +53,16 @@ const RootRoutes = () => {
         component={MyPageScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: () => (
-            <Image source={require('../assets/images/personIcon/person.png')} />
-          ),
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/personIcon/person_active.png')}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/personIcon/person.png')}
+              />
+            ),
         }}
       />
     </Tab.Navigator>

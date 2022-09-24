@@ -40,11 +40,6 @@ const MyPageScreen = () => {
             <Text style={styles.boldText}>홍길동</Text>
             <Text>안녕하세요 홍길동입니다.</Text>
           </View>
-          <Button
-            styles={styles.profileEditButton}
-            title="프로필 수정"
-            color={colors.blue_dark}
-          />
         </View>
       </View>
     </SafeAreaView>
@@ -89,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: 'white',
     width: 350,
-    height: 500,
+    height: 400,
   },
   profileEditButton: {
     width: 100,

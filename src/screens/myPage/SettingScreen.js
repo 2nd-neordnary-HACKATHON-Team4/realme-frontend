@@ -6,17 +6,22 @@ import {
   View,
   Switch,
   TextInput,
+  Button,
 } from 'react-native';
 import colors from '../../constants/color';
+import {useNavigation} from '@react-navigation/native';
 
 const SettingScreen = () => {
   const [blockTimeLimit, setBlockTimeLimit] = useState(false);
   const [startTime, setStartTime] = useState('12:00');
   const [endTime, setEndTime] = useState('12:00');
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView>
-      <Text>설정 해더 추후 추가</Text>
+      {/* <Text>설정 해더 추후 추가</Text> */}
+      <Button title="뒤로가기" onPress={() => navigation.pop()} />
+
       <View style={styles.mainWrap}>
         <View>
           <Text style={styles.title}>알림설정</Text>

@@ -36,16 +36,6 @@ function CalendarScreen() {
       });
   }, []);
 
-  function get_date_str(date) {
-    var sYear = date.getFullYear();
-    var sMonth = date.getMonth() + 1;
-    var sDate = date.getDate();
-
-    sMonth = sMonth > 9 ? sMonth : '0' + sMonth;
-    sDate = sDate > 9 ? sDate : '0' + sDate;
-    return sYear + sMonth + sDate;
-  }
-
   useEffect(() => {
     if (apiData.length > 0) {
       apiData.map(data => {
@@ -134,7 +124,7 @@ function CalendarScreen() {
             <Text>
               <Image style={mainWrapstyles.checkBox} source={CheckIcon} />
               <View style={mainWrapstyles.checkNumber}>
-                <Text>&nbsp; 5</Text>
+                <Text>&nbsp; {postDate.length}</Text>
               </View>
             </Text>
           </View>

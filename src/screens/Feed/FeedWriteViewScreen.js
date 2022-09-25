@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   Image,
   Platform,
   SafeAreaView,
@@ -19,7 +20,7 @@ import Button from '../../components/Button';
 import {axiosInstance} from '../../queries';
 
 const FeedWriteViewScreen = ({route, navigation}) => {
-  const {selectedCategory} = route.params;
+  const {selectedCategoryId, selectedCategoryName} = route.params;
   const [picture, setPicture] = useState({uri: ''});
   const [newFeed, setNewFeed] = useState({
     categoryIdx: 0,
@@ -30,12 +31,22 @@ const FeedWriteViewScreen = ({route, navigation}) => {
   const postFeed = () => {
     axiosInstance
       .post('/home/feeds', {
-        categoryIdx: 1,
+        categoryIdx: selectedCategoryId,
         contents: newFeed.contents,
         imgUrl: newFeed.imgUrl,
+        title: newFeed.title,
       })
       .then(response => {
         console.log(response.data);
+        Alert.alert('글 작성이 완료되었습니다!', '', [
+          {
+            text: '',
+            onPress: () => {
+              navigation.pop();
+              navigation.pop();
+            },
+          },
+        ]);
       })
       .catch(e => {
         console.log(e);
@@ -93,7 +104,7 @@ const FeedWriteViewScreen = ({route, navigation}) => {
               width={54}
               height={26}
               fontSize={12}>
-              {selectedCategory}
+              {selectedCategoryName}
             </Category>
           </View>
         </View>
@@ -143,7 +154,6 @@ const FeedWriteViewScreen = ({route, navigation}) => {
               style={[styles.contentInput, styles.input]}
               placeholder="내용을 입력하세요"
             />
-            <Text>{newFeed.contents}</Text>
           </View>
           <Button
             onPress={() => {

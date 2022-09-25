@@ -14,29 +14,51 @@ import {
   Pressable,
 } from 'react-native';
 import LoginButton from '../components/LoginButton';
+import {axiosInstance} from '../queries';
+import authStorage from '../storages/authStorage';
 
 function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState('');
 
-  const fetchLogin = async () => {
-    axios
-      .post('http://prod.sogogi.shop:9000/users/login', {
+  // email: 'abcd123@gmail.com',
+  // password: 'abcd1234!',
+  const postLogIn = () => {
+    axiosInstance
+      .post('/users/login', {
         email: email,
         password: password,
       })
-      .then(function (response) {
-        console.log(response.data);
-        setUser(response.data.result);
+      .then(response => {
+        if (response.data.isSuccess) {
+          axiosInstance.defaults.headers[
+            'x-access-token'
+          ] = `${response.data.result}`;
+          // authStorage.set(response.data.result);
+          Alert.alert('로그인 되었습니다!', '', [
+            {
+              text: '',
+              onPress: () => {
+                navigation.navigate('Root');
+              },
+            },
+          ]);
+        } else {
+          Alert.alert(`${response.data.message} 다시 시도하세요.`, '', [
+            {
+              text: '',
+              onPress: () => {
+                setEmail('');
+                setPassword('');
+              },
+            },
+          ]);
+        }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(e => {
+        console.log(e);
       });
-  };
-
-  const onPressLogin = () => {
-    fetchLogin();
   };
 
   return (
@@ -65,7 +87,15 @@ function LoginScreen({navigation}) {
         />
         <View style={styles.button}>
           <Text style={styles.search}>아이디 찾기 / 비밀번호 찾기</Text>
-          <LoginButton name="로그인" send={true} onPress={onPressLogin} />
+          <LoginButton
+            name="로그인"
+            send={true}
+            onPress={() => {
+              postLogIn();
+              setEmail('');
+              setPassword('');
+            }}
+          />
           <View style={styles.social}>
             <View style={styles.socialText}>
               <View style={styles.vector} />

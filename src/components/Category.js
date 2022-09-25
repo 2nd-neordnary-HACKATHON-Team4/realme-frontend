@@ -41,7 +41,7 @@ const Category = ({
         offset={{width: 0, height: 4}}
         style={styles({width, height}).block}>
         <TouchableOpacity
-          onPress={handleIsActive}
+          onPress={onPress}
           style={[
             styles({width, height}).block,
             styles({width, height}).backgroundInActive,

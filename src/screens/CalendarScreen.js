@@ -91,10 +91,10 @@ function CalendarScreen() {
       date: '2022-09-27',
     },
   ];
-  const markedDates = postDate.reduce((acc, current) => {
+  const markedDates = posts.reduce((acc, current) => {
     console.log(current);
 
-    const formattedDate = format(new Date(current), 'yyyy-MM-dd');
+    const formattedDate = format(new Date(current.date), 'yyyy-MM-dd');
     acc[formattedDate] = {marked: true};
     return acc;
   }, {});
@@ -145,17 +145,11 @@ function CalendarScreen() {
                   <Text style={mainWrapstyles.cyanText}>카테고리</Text>
                 </View>
                 <View>
-                  <Text style={mainWrapstyles.titleText}>
-                    제목(오늘은 내가 요리사)
-                  </Text>
+                  <Text style={mainWrapstyles.titleText}>데모데이날..!</Text>
                 </View>
               </Text>
               <View>
-                <Text>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget
-                  neque diam massa diam. Ut orci non egestas in velit
-                  consectetur malesuada diam nisl.
-                </Text>
+                <Text>모두 파이팅해주세요!!!</Text>
 
                 <View style={mainWrapstyles.heart}>
                   <Text style={mainWrapstyles.heartText}>

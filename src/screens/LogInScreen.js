@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     width: 76,
     height: 0.5,
     backgroundColor: '#8B95A1',
+    marginBottom: 17,
   },
   middleText: {
     fontSize: 12,

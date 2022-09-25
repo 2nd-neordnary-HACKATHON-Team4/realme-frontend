@@ -27,7 +27,7 @@ const MyPageScreen = () => {
       Axios.get('http://prod.sogogi.shop:9000/users', {
         headers: {
           'X-ACCESS-TOKEN':
-            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDYwMzQ0LCJleHAiOjE2NjQwNjI5MzZ9.Ysfi70HECaQr4Ythtn3VMxM2SyXwaz6ZbpQmxVqn0vQ',
+            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDcxMjY3LCJleHAiOjE2NjQwNzM4NTl9.tveikWPiKz1_OlCWjSXSBVF2plTA8vNymLKPhnm4prc',
         },
       }).then(res => {
         console.log(res.data);
@@ -61,14 +61,10 @@ const MyPageScreen = () => {
           <Image source={DefaultCircle} style={styles.img} />
           <View style={styles.center}>
             <Text style={styles.boldText}>
-              {apiData.result
-                ? apiData.result.nickname
-                : '불러오기를 실패했습니다.'}
+              {apiData.result ? apiData.result.nickname : '홍길동'}
             </Text>
             <Text>
-              {apiData.result
-                ? apiData.result.introduce
-                : '불러오기를 실패했습니다.'}
+              {apiData.result ? apiData.result.introduce : '안녕하세요~.'}
             </Text>
           </View>
           <TouchableOpacity styles={styles.profileEditButton}>

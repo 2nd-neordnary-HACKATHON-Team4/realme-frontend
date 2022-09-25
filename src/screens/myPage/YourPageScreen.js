@@ -47,14 +47,10 @@ const MyPageScreen = () => {
           <Image source={DefaultCircle} style={styles.img} />
           <View style={styles.center}>
             <Text style={styles.boldText}>
-              {apiData.result
-                ? apiData.result.nickname
-                : '불러오기를 실패했습니다.'}
+              {apiData.result ? apiData.result.nickname : '홍길동'}
             </Text>
             <Text>
-              {apiData.result
-                ? apiData.result.introduce
-                : '불러오기를 실패했습니다.'}
+              {apiData.result ? apiData.result.introduce : '안녕하세요'}
             </Text>
           </View>
         </View>

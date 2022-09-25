@@ -16,35 +16,21 @@ import DefaultCircle from '../../assets/defaultCircle.png';
 import SettingButton from '../../assets/setting.png';
 import Arrow from '../../assets/myPage/leftArrow.png';
 import {useNavigation} from '@react-navigation/native';
-import Axios from 'axios';
+import axios from 'axios';
 
 const MyPageScreen = () => {
   const navigation = useNavigation();
   const [apiData, setApiData] = useState({});
 
   useEffect(() => {
-    try {
-      Axios.get('http://prod.sogogi.shop:9000/users', {
-        headers: {
-          'X-ACCESS-TOKEN':
-            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDYwMzQ0LCJleHAiOjE2NjQwNjI5MzZ9.Ysfi70HECaQr4Ythtn3VMxM2SyXwaz6ZbpQmxVqn0vQ',
-        },
-      }).then(res => {
-        console.log(res.data);
-        setApiData(res.data);
-      });
-    } catch (e) {
-      console.log('error');
-    }
+    axios.get(`http://prod.sogogi.shop:9000/users/14`).then(res => {
+      console.log(res.data);
+      setApiData(res.data);
+    });
   }, []);
-
-  useEffect(() => {
-    console.log(apiData);
-  }, [apiData]);
 
   return (
     <SafeAreaView>
-      <View style={styles.backGreen}></View>
       <View style={styles.header}>
         <TouchableOpacity>
           <Text>
@@ -71,9 +57,6 @@ const MyPageScreen = () => {
                 : '불러오기를 실패했습니다.'}
             </Text>
           </View>
-          <TouchableOpacity styles={styles.profileEditButton}>
-            <Text>프로필 수정</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -81,13 +64,6 @@ const MyPageScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  backGreen: {
-    width: '100%',
-    height: 400,
-    position: 'absolute',
-    backgroundColor: '#32E7DC',
-    borderRadius: 20,
-  },
   arrow: {
     width: 15,
     height: 13,
@@ -119,18 +95,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backGray: {
-    marginTop: 120,
+    marginTop: 160,
     borderRadius: 80,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
     width: 350,
-    height: 440,
+    height: 400,
   },
   profileEditButton: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
+    width: 100,
+    height: 40,
   },
   block: {
     flex: 1,

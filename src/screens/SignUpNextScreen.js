@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {
   StyleSheet,
@@ -14,16 +14,27 @@ import {
   Pressable,
 } from 'react-native';
 import LoginButton from '../components/LoginButton';
+import NickNameModal from '../components/NickNameModal';
 
 function SignUpNextScreen({navigation, route, email, setEmail}) {
   const [send, isSend] = useState(false);
   const [password, setPassword] = useState('');
-  const [comfirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [valid, setValid] = useState(false);
+  const [duplicate, setDuplicate] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fetchDuplication = async () => {
     axios
-      .get('http://prod.sogogi.shop:9000/users/nickname/aa/duplication')
+      .get(
+        `http://prod.sogogi.shop:9000/users/nickname/${nickname}/duplication`,
+        {
+          headers: {
+            accept: 'application/json;charset=UTF-8',
+          },
+        },
+      )
       .then(function (response) {
         console.log(response.data);
       })
@@ -49,60 +60,94 @@ function SignUpNextScreen({navigation, route, email, setEmail}) {
 
   const onPressDuplication = () => {
     fetchDuplication;
+    setIsModalVisible(true);
   };
 
   const onPressSignUp = () => {
+    if (password.length < 8) {
+      setValid(true);
+    }
+    if (password !== confirmPassword) {
+      setDuplicate(true);
+    }
     fetchSignUp;
   };
+
+  useEffect(() => {
+    if (valid && password.length >= 8) {
+      setValid(false);
+    }
+  }, [password]);
+  useEffect(() => {
+    if (duplicate && password === confirmPassword) {
+      setDuplicate(false);
+    }
+  }, [confirmPassword]);
+
   console.log(route.params.email);
   return (
-    <SafeAreaView style={styles.fullscreen}>
-      <View style={styles.top}>
-        {/* input component */}
-        <View style={styles.box}>
-          <Text style={styles.text}>비밀번호</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="특수기호 포함 8자리 이상"
-            placeholderTextColor={'#C5CCD4'}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-        </View>
-        <View style={styles.box}>
-          <Text style={styles.text}>비밀번호 확인</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="비밀번호를 한 번 더 입력해주세요"
-            placeholderTextColor={'#C5CCD4'}
-            value={comfirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
-        </View>
-        <View style={styles.box}>
-          <Text style={styles.text}>닉네임</Text>
-          <View style={styles.duplicationBox}>
+    <>
+      <SafeAreaView style={styles.fullscreen}>
+        <View style={styles.top}>
+          {/* input component */}
+          <View style={styles.box}>
+            <Text style={styles.text}>비밀번호</Text>
             <TextInput
-              style={styles.nicknameInput}
-              placeholder="최대 8자를 입력해주세요"
+              style={styles.input}
+              placeholder="특수기호 포함 8자리 이상"
               placeholderTextColor={'#C5CCD4'}
-              value={nickname}
-              onChangeText={setNickname}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
             />
-            <Pressable
-              style={styles.duplicationBtn}
-              onPress={onPressDuplication}>
-              <Text style={styles.sendBtnText}>중복확인</Text>
-            </Pressable>
+          </View>
+          {valid ? (
+            <Text style={styles.valid}>
+              특수기호 포함 8자리 이상을 입력해주세요
+            </Text>
+          ) : (
+            <></>
+          )}
+          <View style={styles.box}>
+            <Text style={styles.text}>비밀번호 확인</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="비밀번호를 한 번 더 입력해주세요"
+              placeholderTextColor={'#C5CCD4'}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+            />
+          </View>
+          {duplicate ? (
+            <Text style={styles.valid}>비밀번호가 일치하지 않습니다.</Text>
+          ) : (
+            <></>
+          )}
+          <View style={styles.box}>
+            <Text style={styles.text}>닉네임</Text>
+            <View style={styles.duplicationBox}>
+              <TextInput
+                style={styles.nicknameInput}
+                placeholder="최대 8자를 입력해주세요"
+                placeholderTextColor={'#C5CCD4'}
+                value={nickname}
+                onChangeText={setNickname}
+              />
+              <Pressable
+                style={styles.duplicationBtn}
+                onPress={onPressDuplication}>
+                <Text style={styles.sendBtnText}>중복확인</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.bottom}>
-        <LoginButton name="다음" send={true} onPress={onPressSignUp} />
-      </View>
-    </SafeAreaView>
+        <View style={styles.bottom}>
+          <LoginButton name="완료" send={true} onPress={onPressSignUp} />
+        </View>
+      </SafeAreaView>
+      <NickNameModal visible={isModalVisible} setVisible={setIsModalVisible} />
+    </>
   );
 }
 
@@ -193,6 +238,13 @@ const styles = StyleSheet.create({
     height: 120,
     bottom: 0,
     paddingHorizontal: 30,
+  },
+  valid: {
+    color: '#CA2323',
+    fontSize: 10,
+    fontWeight: '400',
+    marginTop: -20,
+    marginBottom: 20,
   },
 });
 

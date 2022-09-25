@@ -6,24 +6,37 @@ import {
   View,
   Switch,
   TextInput,
+  Button,
+  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import colors from '../../constants/color';
+import {useNavigation} from '@react-navigation/native';
 
 const SettingScreen = () => {
   const [blockTimeLimit, setBlockTimeLimit] = useState(false);
   const [startTime, setStartTime] = useState('12:00');
   const [endTime, setEndTime] = useState('12:00');
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView>
-      <Text>설정 해더 추후 추가</Text>
+      {/* <Text>설정 해더 추후 추가</Text> */}
+      <Button
+        title="뒤로가기"
+        style={styles.backBtn}
+        onPress={() => navigation.pop()}
+      />
+
       <View style={styles.mainWrap}>
         <View>
           <Text style={styles.title}>알림설정</Text>
           {!blockTimeLimit ? (
             <View style={[styles.element]}>
               <View style={styles.flexAttr}>
-                <Text style={styles.elementText}>방해금지 시간 설정</Text>
+                <Text style={[styles.elementText, styles.blockTimeText]}>
+                  방해금지 시간 설정
+                </Text>
                 <Switch
                   onValueChange={setBlockTimeLimit}
                   value={blockTimeLimit}
@@ -35,7 +48,9 @@ const SettingScreen = () => {
             <>
               <View style={[styles.element, styles.longView]}>
                 <View style={styles.flexAttr}>
-                  <Text style={[styles.elementText]}>방해금지 시간 설정</Text>
+                  <Text style={[styles.elementText, styles.blockTimeText]}>
+                    방해금지 시간 설정
+                  </Text>
                   <Switch
                     onValueChange={setBlockTimeLimit}
                     value={blockTimeLimit}
@@ -66,7 +81,11 @@ const SettingScreen = () => {
         <View>
           <Text style={styles.title}>이용안내</Text>
           <View style={styles.element}>
-            <Text style={styles.elementText}>공지사항</Text>
+            <TouchableHighlight>
+              <View>
+                <Text style={styles.elementText}>공지사항</Text>
+              </View>
+            </TouchableHighlight>
           </View>
           <View style={styles.element}>
             <Text style={styles.elementText}>개인정보처리방침</Text>
@@ -87,11 +106,20 @@ const SettingScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  backBtn: {
+    textAlign: 'left',
+  },
+  touchable: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+  },
+  blockTimeText: {marginTop: 0},
   switchColor: {
     ios_backgroundColor: colors.blue_dark,
     thumbColor: colors.blue_dark,
     trackColor: {false: 'white', true: colors.blue_dark},
-    paddingTop: -10,
+    top: -6,
   },
   timeText: {color: colors.blue_dark},
   upPadding: {paddingTop: 25},

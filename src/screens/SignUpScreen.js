@@ -20,6 +20,26 @@ import {axiosInstance} from '../queries';
 function SignUpScreen({navigation, route}) {
   const [send, isSend] = useState(false);
   const [email, setEmail] = useState('');
+  const [minutes, setMinutes] = useState(3);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (parseInt(seconds) > 0) {
+        setSeconds(parseInt(seconds) - 1);
+      }
+      if (parseInt(seconds) === 0) {
+        if (parseInt(minutes) === 0) {
+          clearInterval(countdown);
+        } else {
+          setMinutes(parseInt(minutes) - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(countdown);
+  }, [minutes, seconds, send]);
 
   const onPressSend = () => {
     isSend(true);
@@ -62,7 +82,9 @@ function SignUpScreen({navigation, route}) {
             <Text style={styles.validationText}>인증번호 ?자리</Text>
             <View style={styles.validationContainer}>
               <TextInput style={styles.validationInput} />
-              <Text style={styles.timer}>??분 ??초</Text>
+              <Text style={styles.timer}>
+                {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+              </Text>
             </View>
 
             <View style={styles.bar} />

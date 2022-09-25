@@ -13,11 +13,52 @@ import colors from '../constants/color';
 import HeartIcon from '../assets/calendar/heart.png';
 import HeartFillIcon from '../assets/calendar/heart_fill.png';
 import CheckIcon from '../assets/calendar/check.png';
+import axios from 'axios';
 
 LocaleConfig.defaultLocale = 'kr';
 
 function CalendarScreen() {
-  const [pickContent, setPickContent] = useState('');
+  const [apiData, setApiData] = useState('');
+  const [postDate, setPostDate] = useState([]);
+
+  useEffect(() => {
+    console.log('work');
+    axios
+      .get('http://prod.sogogi.shop:9000/home/calendar?date=2022-09', {
+        headers: {
+          'X-ACCESS-TOKEN':
+            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDcxMjY3LCJleHAiOjE2NjQwNzM4NTl9.tveikWPiKz1_OlCWjSXSBVF2plTA8vNymLKPhnm4prc',
+        },
+      })
+      .then(res => {
+        console.log(res.data.result);
+        setApiData(res.data.result);
+      });
+  }, []);
+
+  function get_date_str(date) {
+    var sYear = date.getFullYear();
+    var sMonth = date.getMonth() + 1;
+    var sDate = date.getDate();
+
+    sMonth = sMonth > 9 ? sMonth : '0' + sMonth;
+    sDate = sDate > 9 ? sDate : '0' + sDate;
+    return sYear + sMonth + sDate;
+  }
+
+  useEffect(() => {
+    if (apiData.length > 0) {
+      apiData.map(data => {
+        const changeString = data.creatAt + '';
+        const cutDate = changeString.substring(0, 10);
+        console.log();
+        console.log(cutDate);
+        setPostDate(date => [...date, cutDate]);
+        // const cutDate = get_date_str(toString(data.creatAt));
+      });
+    }
+  }, [apiData]);
+
   const posts = [
     {
       id: 1,
@@ -26,16 +67,34 @@ function CalendarScreen() {
       date: '2022-09-26',
     },
     {
+      id: 3,
+      title: '제목입니다.',
+      contents: '내용입니다.',
+      date: '2022-09-16',
+    },
+    {
+      id: 4,
+      title: '제목입니다.',
+      contents: '내용입니다.',
+      date: '2022-09-06',
+    },
+    {
+      id: 5,
+      title: '제목입니다.',
+      contents: '내용입니다.',
+      date: '2022-09-08',
+    },
+    {
       id: 2,
       title: '제목입니다.',
       contents: '내용입니다.',
-      date: '2022-02-27',
+      date: '2022-09-27',
     },
   ];
-  const markedDates = posts.reduce((acc, current) => {
+  const markedDates = postDate.reduce((acc, current) => {
     console.log(current);
 
-    const formattedDate = format(new Date(current.date), 'yyyy-MM-dd');
+    const formattedDate = format(new Date(current), 'yyyy-MM-dd');
     acc[formattedDate] = {marked: true};
     return acc;
   }, {});
@@ -104,7 +163,7 @@ function CalendarScreen() {
                       style={mainWrapstyles.heartIcon}
                       source={HeartIcon}
                     />
-                    &nbsp; X개
+                    &nbsp; 19개
                   </Text>
                 </View>
               </View>

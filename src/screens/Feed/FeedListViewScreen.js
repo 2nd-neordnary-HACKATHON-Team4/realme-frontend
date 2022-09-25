@@ -17,23 +17,41 @@ import ShadowEffect from '../../components/ShadowEffect';
 import {axiosInstance} from '../../queries';
 import {useRecoilState} from 'recoil';
 import {categoryListState} from '../../atoms/category';
+import {feedListState} from '../../atoms/feed';
+import {format} from 'date-fns';
 
 const FeedListViewScreen = () => {
   const navigation = useNavigation();
   const [isHeartPressed, setIsHeartPressed] = useState(false);
+  const [isAllCategoryChecked, setIsAllCategoryChecked] = useState(false);
   const [categoryList, setCategoryList] = useRecoilState(categoryListState);
-  const postSignUp = () => {
+  const [selectedCategory, setSelectedCategory] = useState(0);
+
+  useEffect(() => {
+    const getCategoryList = () => {
+      axiosInstance
+        .get('/categories/list')
+        .then(response => {
+          setCategoryList(
+            response.data.result.map(item => ({...item, isActive: false})),
+          );
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getCategoryList();
+  }, [setCategoryList]);
+
+  const [feedList, setFeedList] = useRecoilState(feedListState);
+  const getFeedList = () => {
     axiosInstance
-      .post('/users/login', {
-        email: 'abcd123@gmail.com',
-        password: 'abcd1234!',
-      })
+      .get(`/categories?categoryIdx=${selectedCategory}`)
       .then(response => {
-        console.log(response.data);
-        console.log(response.data.result);
-        axiosInstance.defaults.headers[
-          'x-access-token'
-        ] = `${response.data.result}`;
+        if (response.data.isSuccess) {
+          console.log(response.data.result);
+          setFeedList(response.data.result);
+        }
       })
       .catch(e => {
         console.log(e);
@@ -41,91 +59,86 @@ const FeedListViewScreen = () => {
   };
 
   useEffect(() => {
-    const getCategoryList = () => {
-      axiosInstance
-        .get('/categories/list')
-        .then(response => {
-          console.log(response.data.result);
-          setCategoryList(response.data.result);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };
-    getCategoryList();
-  }, []);
+    getFeedList();
+  }, [selectedCategory]);
 
-  const [feedList, setFeedList] = useState([
-    {
-      id: 0,
-      username: '홍길동',
-      category: '카테고리',
-      title: '제목(오늘은 내가 요리사)',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egeneque diam massa diam. Ut orci non egestas in velit consecteturmalesuada diam nisl.',
-      heartNum: 3,
-      date: '1일 전',
-    },
-    {
-      id: 1,
-      username: '홍길동',
-      category: '카테고리',
-      title: '제목(오늘은 내가 요리사)',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egeneque diam massa diam. Ut orci non egestas in velit consecteturmalesuada diam nisl.',
-      heartNum: 2,
-      date: '1일 전',
-    },
-    {
-      id: 2,
-      username: '홍길동',
-      category: '카테고리',
-      title: '제목(오늘은 내가 요리사)',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egeneque diam massa diam. Ut orci non egestas in velit consecteturmalesuada diam nisl.',
-      heartNum: 2,
-      date: '1일 전',
-    },
-    {
-      id: 3,
-      username: '홍길동',
-      category: '카테고리',
-      title: '제목(오늘은 내가 요리사)',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egeneque diam massa diam. Ut orci non egestas in velit consecteturmalesuada diam nisl.',
-      heartNum: 2,
-      date: '1일 전',
-    },
-    {
-      id: 4,
-      username: '홍길동',
-      category: '카테고리',
-      title: '제목(오늘은 내가 요리사)',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egeneque diam massa diam. Ut orci non egestas in velit consecteturmalesuada diam nisl.',
-      heartNum: 2,
-      date: '1일 전',
-    },
-    {
-      id: 5,
-      username: '홍길동',
-      category: '카테고리',
-      title: '제목(오늘은 내가 요리사)',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Egeneque diam massa diam. Ut orci non egestas in velit consecteturmalesuada diam nisl.',
-      heartNum: 2,
-      date: '1일 전',
-    },
-  ]);
+  const onHeartPress = ({id}) => {
+    // console.log(id);
+    // feedList.map(feed => console.log(feed.id));
+    setFeedList(
+      feedList.map(feed => {
+        if (feed.id === id) {
+          axiosInstance
+            .post(`/home/feed/${feed.id}/like`)
+            .then(response => {
+              console.log(response.data.result);
+            })
+            .then(response => {
+              if (response.data.result.heartedPressed) {
+                return {
+                  ...feed,
+                  isHeartPressed: true,
+                  likeCount: feed.likeCount + 1,
+                };
+              } else {
+                return {
+                  ...feed,
+                  isHeartPressed: false,
+                  likeCount: feed.likeCount - 1,
+                };
+              }
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        } else {
+          return feed;
+        }
+      }),
+    );
+  };
+
   return (
     <SafeAreaView style={styles.block}>
       <StatusBar backgroundColor="white" />
       <View style={styles.categoryContainer}>
         <ScrollView horizontal={true} style={styles.categoryList}>
+          <View style={styles.category}>
+            <Category
+              isActive={isAllCategoryChecked}
+              onPress={() => {
+                setIsAllCategoryChecked(prev => !prev);
+                setCategoryList(
+                  categoryList.map(category => ({
+                    ...category,
+                    isActive: false,
+                  })),
+                );
+                setSelectedCategory(0);
+              }}
+              width={56}
+              height={26}>
+              전체
+            </Category>
+          </View>
           {categoryList.map((item, index) => {
             return (
-              <View key={index} style={styles.category}>
-                <Category isActive={true} width={56} height={26}>
+              <View key={item.categoryIdx} style={styles.category}>
+                <Category
+                  isActive={item.isActive}
+                  onPress={() => {
+                    setIsAllCategoryChecked(false);
+                    setCategoryList(
+                      categoryList.map(category =>
+                        category.categoryIdx === index + 1
+                          ? {...category, isActive: true}
+                          : {...category, isActive: false},
+                      ),
+                    );
+                    setSelectedCategory(item.categoryIdx);
+                  }}
+                  width={56}
+                  height={26}>
                   {item.categoryName}
                 </Category>
               </View>
@@ -145,28 +158,30 @@ const FeedListViewScreen = () => {
               <Image
                 source={require('../../assets/images/profileIcon/profile.png')}
               />
-              <Text style={styles.username}>{item.username}</Text>
+              <Text style={styles.username}>{item.userProtected.nickname}</Text>
             </View>
             <View>
               <View style={styles.titleContainer}>
                 <View style={styles.itemCategory}>
-                  <Text style={styles.categoryText}>{item.category}</Text>
+                  <Text style={styles.categoryText}>
+                    {item.categoryProtected.categoryName}
+                  </Text>
                 </View>
                 <View>
                   <Text style={styles.titleText}>{item.title}</Text>
                 </View>
               </View>
               <View style={styles.content}>
-                <Text style={styles.contentText}>{item.content}</Text>
+                <Text style={styles.contentText}>{item.contents}</Text>
               </View>
               <View style={styles.bottom}>
                 <TouchableOpacity
                   style={styles.heart}
                   onPress={() => {
-                    setIsHeartPressed(prev => !prev);
+                    onHeartPress({id: item.id});
                   }}>
                   <View style={styles.heartImage}>
-                    {isHeartPressed ? (
+                    {item.heartedPressed ? (
                       <Image
                         source={require('../../assets/images/heartIcon/heart_active.png')}
                       />
@@ -176,27 +191,14 @@ const FeedListViewScreen = () => {
                       />
                     )}
                   </View>
-                  <Text>{item.heartNum}개</Text>
+                  <Text>{item.likeCount}개</Text>
                 </TouchableOpacity>
-                <Text>{item.date}</Text>
+                <Text>{format(new Date(), 'MM.dd')}</Text>
               </View>
             </View>
           </View>
         )}
       />
-      <ShadowEffect
-        shadowColor={colors.blue_dark}
-        offset={{width: 4, height: 4}}>
-        <TouchableOpacity
-          // style={styles.addButton}
-          style={{backgroundColor: colors.gray_black, width: 40}}
-          onPress={() => {
-            postSignUp();
-            // navigation.navigate('FeedTagChoose');
-          }}>
-          <Text style={{color: 'white'}}>login</Text>
-        </TouchableOpacity>
-      </ShadowEffect>
       <ShadowEffect
         shadowColor={colors.blue_dark}
         offset={{width: 4, height: 4}}>

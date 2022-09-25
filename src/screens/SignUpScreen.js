@@ -15,6 +15,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import LoginButton from '../components/LoginButton';
+import {axiosInstance} from '../queries';
 
 function SignUpScreen({navigation, route}) {
   const [send, isSend] = useState(false);
@@ -64,7 +65,7 @@ function SignUpScreen({navigation, route}) {
               <Text style={styles.timer}>??분 ??초</Text>
             </View>
 
-            <View style={styles.bar}></View>
+            <View style={styles.bar} />
             <Text style={styles.validationWarning}>
               인증번호는 입력한 이메일 주소로 발송됩니다.
             </Text>

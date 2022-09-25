@@ -21,7 +21,10 @@ import {categoryListState} from '../../atoms/category';
 const FeedTagChooseScreen = () => {
   const navigation = useNavigation();
   const [categoryList, setCategoryList] = useRecoilState(categoryListState);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState({
+    id: 0,
+    name: '',
+  });
 
   return (
     <SafeAreaView style={styles.block}>
@@ -49,14 +52,23 @@ const FeedTagChooseScreen = () => {
             style={styles.categoryContainer}
             data={categoryList}
             renderItem={item =>
-              item.index % 2 !== 0 ? (
+              item.index % 2 === 0 ? (
                 <View style={[styles.categoryWrapper, styles.categoryWidth]}>
                   <Category
                     key={item.item.categoryIdx}
-                    isActive={true}
+                    isActive={item.item.isActive}
                     onPress={() => {
-                      setSelectedCategory(item.item.categoryName);
-                      console.log(item.item.categoryName);
+                      setSelectedCategory({
+                        id: item.item.categoryIdx,
+                        name: item.item.categoryName,
+                      });
+                      setCategoryList(
+                        categoryList.map(category =>
+                          category.categoryIdx === item.index + 1
+                            ? {...category, isActive: true}
+                            : {...category, isActive: false},
+                        ),
+                      );
                     }}
                     width={71}
                     height={38}
@@ -68,10 +80,16 @@ const FeedTagChooseScreen = () => {
                 <View style={[styles.categoryWrapper]}>
                   <Category
                     key={item.item.categoryIdx}
-                    isActive={true}
+                    isActive={item.item.isActive}
                     onPress={() => {
                       setSelectedCategory(item.item.categoryName);
-                      console.log(item.item.categoryName);
+                      setCategoryList(
+                        categoryList.map(category =>
+                          category.categoryIdx === item.index + 1
+                            ? {...category, isActive: true}
+                            : {...category, isActive: false},
+                        ),
+                      );
                     }}
                     width={71}
                     height={38}
@@ -89,7 +107,8 @@ const FeedTagChooseScreen = () => {
             style={styles.writeButton}
             onPress={() => {
               navigation.navigate('FeedWriteView', {
-                selectedCategory: selectedCategory,
+                selectedCategoryId: selectedCategory.id,
+                selectedCategoryName: selectedCategory.name,
               });
             }}>
             작성하기
@@ -142,7 +161,6 @@ const styles = StyleSheet.create({
     width: 160,
     display: 'flex',
     alignItems: 'center',
-    // backgroundColor: 'black',
   },
   categoryWrapper: {
     marginBottom: 11,

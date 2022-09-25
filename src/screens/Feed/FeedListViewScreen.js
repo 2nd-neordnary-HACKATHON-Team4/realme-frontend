@@ -63,39 +63,31 @@ const FeedListViewScreen = () => {
   }, [selectedCategory]);
 
   const onHeartPress = ({id}) => {
-    // console.log(id);
-    // feedList.map(feed => console.log(feed.id));
-    setFeedList(
-      feedList.map(feed => {
-        if (feed.id === id) {
-          axiosInstance
-            .post(`/home/feed/${feed.id}/like`)
-            .then(response => {
-              console.log(response.data.result);
-            })
-            .then(response => {
-              if (response.data.result.heartedPressed) {
-                return {
-                  ...feed,
-                  isHeartPressed: true,
-                  likeCount: feed.likeCount + 1,
-                };
-              } else {
-                return {
-                  ...feed,
-                  isHeartPressed: false,
-                  likeCount: feed.likeCount - 1,
-                };
-              }
-            })
-            .catch(e => {
-              console.log(e);
-            });
-        } else {
-          return feed;
-        }
-      }),
-    );
+    feedList.map(feed => {
+      if (feed.id === id) {
+        axiosInstance
+          .post(`/home/feed/${feed.id}/like`)
+          .then(response => {
+            console.log(response.data.result);
+            setFeedList(
+              feedList.map(feed =>
+                feed.id === id
+                  ? {
+                      ...feed,
+                      heartedPressed: response.data.result.heartedPressed,
+                      likeCount: response.data.result.heartedPressed
+                        ? feed.likeCount + 1
+                        : feed.likeCount - 1,
+                    }
+                  : feed,
+              ),
+            );
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
+    });
   };
 
   return (

@@ -43,10 +43,28 @@ function CalendarScreen() {
       date: '2022-09-26',
     },
     {
+      id: 3,
+      title: '제목입니다.',
+      contents: '내용입니다.',
+      date: '2022-09-16',
+    },
+    {
+      id: 4,
+      title: '제목입니다.',
+      contents: '내용입니다.',
+      date: '2022-09-06',
+    },
+    {
+      id: 5,
+      title: '제목입니다.',
+      contents: '내용입니다.',
+      date: '2022-09-08',
+    },
+    {
       id: 2,
       title: '제목입니다.',
       contents: '내용입니다.',
-      date: '2022-02-27',
+      date: '2022-09-27',
     },
   ];
   const markedDates = posts.reduce((acc, current) => {
@@ -121,7 +139,7 @@ function CalendarScreen() {
                       style={mainWrapstyles.heartIcon}
                       source={HeartIcon}
                     />
-                    &nbsp; X개
+                    &nbsp; 19개
                   </Text>
                 </View>
               </View>

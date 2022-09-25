@@ -13,11 +13,28 @@ import colors from '../constants/color';
 import HeartIcon from '../assets/calendar/heart.png';
 import HeartFillIcon from '../assets/calendar/heart_fill.png';
 import CheckIcon from '../assets/calendar/check.png';
+import axios from 'axios';
 
 LocaleConfig.defaultLocale = 'kr';
 
 function CalendarScreen() {
-  const [pickContent, setPickContent] = useState('');
+  const [apiData, setApiData] = useState('');
+  const [postDate, setPostDate] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://prod.sogogi.shop:9000/home/calendar?date=2022-09', {
+        headers: {
+          'X-ACCESS-TOKEN':
+            'eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VySWR4IjoxNCwiaWF0IjoxNjY0MDcxMjY3LCJleHAiOjE2NjQwNzM4NTl9.tveikWPiKz1_OlCWjSXSBVF2plTA8vNymLKPhnm4prc',
+        },
+      })
+      .then(res => {
+        console.log(res.data);
+        setApiData(res.data);
+      });
+  }, []);
+
   const posts = [
     {
       id: 1,

@@ -22,6 +22,7 @@ function CalendarScreen() {
   const [postDate, setPostDate] = useState([]);
 
   useEffect(() => {
+    console.log('work');
     axios
       .get('http://prod.sogogi.shop:9000/home/calendar?date=2022-09', {
         headers: {
@@ -30,10 +31,33 @@ function CalendarScreen() {
         },
       })
       .then(res => {
-        console.log(res.data);
-        setApiData(res.data);
+        console.log(res.data.result);
+        setApiData(res.data.result);
       });
   }, []);
+
+  function get_date_str(date) {
+    var sYear = date.getFullYear();
+    var sMonth = date.getMonth() + 1;
+    var sDate = date.getDate();
+
+    sMonth = sMonth > 9 ? sMonth : '0' + sMonth;
+    sDate = sDate > 9 ? sDate : '0' + sDate;
+    return sYear + sMonth + sDate;
+  }
+
+  useEffect(() => {
+    if (apiData.length > 0) {
+      apiData.map(data => {
+        const changeString = data.creatAt + '';
+        const cutDate = changeString.substring(0, 10);
+        console.log();
+        console.log(cutDate);
+        setPostDate(date => [...date, cutDate]);
+        // const cutDate = get_date_str(toString(data.creatAt));
+      });
+    }
+  }, [apiData]);
 
   const posts = [
     {
@@ -67,10 +91,10 @@ function CalendarScreen() {
       date: '2022-09-27',
     },
   ];
-  const markedDates = posts.reduce((acc, current) => {
+  const markedDates = postDate.reduce((acc, current) => {
     console.log(current);
 
-    const formattedDate = format(new Date(current.date), 'yyyy-MM-dd');
+    const formattedDate = format(new Date(current), 'yyyy-MM-dd');
     acc[formattedDate] = {marked: true};
     return acc;
   }, {});

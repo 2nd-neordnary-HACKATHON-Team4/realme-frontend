@@ -47,7 +47,7 @@ function CalendarScreen() {
   }
 
   useEffect(() => {
-    if (apiData.length > 0) {
+    if (apiData && apiData.length > 0) {
       apiData.map(data => {
         const changeString = data.creatAt + '';
         const cutDate = changeString.substring(0, 10);

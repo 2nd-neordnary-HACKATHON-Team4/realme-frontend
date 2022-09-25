@@ -44,6 +44,7 @@ const MyPageScreen = () => {
 
   return (
     <SafeAreaView>
+      <View style={styles.backGreen}></View>
       <View style={styles.header}>
         <TouchableOpacity>
           <Text>
@@ -70,11 +71,9 @@ const MyPageScreen = () => {
                 : '불러오기를 실패했습니다.'}
             </Text>
           </View>
-          <Button
-            styles={styles.profileEditButton}
-            title="프로필 수정"
-            color={colors.blue_dark}
-          />
+          <TouchableOpacity styles={styles.profileEditButton}>
+            <Text>프로필 수정</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -82,6 +81,13 @@ const MyPageScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  backGreen: {
+    width: '100%',
+    height: 400,
+    position: 'absolute',
+    backgroundColor: '#32E7DC',
+    borderRadius: 20,
+  },
   arrow: {
     width: 15,
     height: 13,
@@ -122,8 +128,9 @@ const styles = StyleSheet.create({
     height: 440,
   },
   profileEditButton: {
-    width: 100,
-    height: 40,
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
   },
   block: {
     flex: 1,

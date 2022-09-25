@@ -19,7 +19,8 @@ const HomeScreen = () => {
           name="SettingScreen"
           component={SettingScreen}
           options={{
-            headerShown: false,
+            headerTitle: '설정',
+            headerBackTitle: '뒤로가기',
           }}
         />
       </Stack.Navigator>

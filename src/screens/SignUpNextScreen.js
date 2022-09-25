@@ -143,7 +143,7 @@ function SignUpNextScreen({navigation, route, email, setEmail}) {
           </View>
         </View>
         <View style={styles.bottom}>
-          <LoginButton name="다음" send={true} onPress={onPressSignUp} />
+          <LoginButton name="완료" send={true} onPress={onPressSignUp} />
         </View>
       </SafeAreaView>
       <NickNameModal visible={isModalVisible} setVisible={setIsModalVisible} />

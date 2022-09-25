@@ -98,7 +98,7 @@ const LoginRoutes = () => {
         options={{
           title: '회원가입(1/2)',
           headerTitleStyle: {color: 'black', fontWeight: 'bold'},
-          headerTintColor: '#62F6EE',
+          headerTintColor: '#32E7DC',
         }}
       />
       <LogInStack.Screen
@@ -107,7 +107,7 @@ const LoginRoutes = () => {
         options={{
           title: '회원가입(2/2)',
           headerTitleStyle: {color: 'black', fontWeight: 'bold'},
-          headerTintColor: '#62F6EE',
+          headerTintColor: '#32E7DC',
         }}
       />
     </LogInStack.Navigator>

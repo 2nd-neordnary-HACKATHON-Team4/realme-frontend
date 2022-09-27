@@ -36,7 +36,7 @@ function SignUpNextScreen({navigation, route, email, setEmail}) {
         },
       )
       .then(function (response) {
-        console.log(response.data);
+        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
